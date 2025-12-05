@@ -19,7 +19,7 @@ export default function Final({ src, error }) {
 
       const timer = setTimeout(() => {
         setcount((prev) => prev + 1);
-      }, 2000);
+      }, 5000);
 
       return () => clearTimeout(timer);
     }

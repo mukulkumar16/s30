@@ -1,50 +1,58 @@
-//@ts-nocheck
-'use client'
+// @ts-nocheck
+"use client";
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { ImageTooltip } from "./ImageTooltip";
 
 export default function ImageLoad({ src, error }) {
-  const [count, setcount] = useState(0);
-  const [isloading, setisloading] = useState(false);
+  const [count, setCount] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+
   const ERROR_ICON =
     "https://uxwing.com/wp-content/themes/uxwing/download/signs-and-symbols/error-icon.png";
 
   useEffect(() => {
+    
     if (error && count < 3) {
-      setisloading(true);
+      setIsLoading(true);
 
+      const t = setTimeout(() => {
+        setCount((prev) => prev + 1);
+      }, 5000);
 
-
-      const timer = setTimeout(() => {
-        setcount((prev) => prev + 1);
-      }, 2000);
-
-      return () => clearTimeout(timer);
+      return () => clearTimeout(t);
     }
-    setisloading(false);
-}, [count, error]);
 
-const status = isloading ? "loading" : error && count >= 3 ? "error" : "ready";
+    
+    setIsLoading(false);
+  }, [count, error]);
+
+  const status =
+    isLoading ? "loading" : error && count >= 3 ? "error" : "ready";
 
   return (
     <ImageTooltip status={status} count={count}>
-    <div
-      className="relative rounded-full overflow-hidden flex justify-center items-center"
-      style={{ width: "70px", height: "70px" }}
-    >
-      {isloading ? (
-       
-        <div className="animate-spin h-8 w-8 border-4 border-white border-t-transparent rounded-full"></div>
-      ) : error ? (
-       
-        <Image src={ERROR_ICON} alt="error" fill style={{ objectFit: "cover" }} />
-      ) : (
+      <div
+        className="relative h-[70px]  w-[70px] rounded-full overflow-hidden flex justify-center items-center"
         
-        <Image src={src} alt="img" fill style={{ objectFit: "cover" }} />
-      )}
-    </div>
+      >
+        {isLoading ? (
+          
+          <div className="animate-spin h-8 w-8 border-4 border-white border-t-transparent rounded-full"></div>
+        ) : error && count >= 3 ? (
+          
+          <Image
+            src={ERROR_ICON}
+            alt="error"
+            fill
+            style={{ objectFit: "cover" }}
+          />
+        ) : (
+         
+          <Image src={src} alt="image" fill style={{ objectFit: "cover" }} />
+        )}
+      </div>
     </ImageTooltip>
   );
 }
